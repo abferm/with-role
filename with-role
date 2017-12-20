@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# This script helps work around not having the ability to use the --profile switch on ec2 instances
+role=$1
+
+if [ "$role" != "none" ]; then
+  json_response=`aws sts assume-role --role-arn ${role} --role-session-name with_role --duration-seconds 900`
+
+  export AWS_ACCESS_KEY_ID=`echo $json_response | jq -r '.Credentials.AccessKeyId'`
+  export AWS_SECRET_ACCESS_KEY=`echo $json_response | jq -r '.Credentials.SecretAccessKey'`
+  export AWS_SESSION_TOKEN=`echo $json_response | jq -r '.Credentials.SessionToken'`
+  export AWS_SECURITY_TOKEN=`echo $json_response | jq -r '.Credentials.SessionToken'`
+fi
+
+${@:2}
