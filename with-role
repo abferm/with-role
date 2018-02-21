@@ -12,4 +12,4 @@ if [ "$role" != "none" ]; then
   export AWS_SECURITY_TOKEN=`echo $json_response | jq -r '.Credentials.SessionToken'`
 fi
 
-${@:2}
+"${@:2}"
